@@ -1,0 +1,12 @@
+<div class="d-flex gap-5 fs-2">
+  <div class="holiday"
+       *ngFor="let holidayType of typesOfHolidays"
+       [innerText]="'Festiu ' + holidayType.name"
+       [style]="{color: holidayType.color}">
+  </div>
+</div>
+
+<app-month-calendar
+  *ngFor="let month of monthsToShow"
+  [month]="month">
+</app-month-calendar>
