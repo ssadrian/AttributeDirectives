@@ -6,7 +6,18 @@
   </div>
 </div>
 
-<app-month-calendar
-  *ngFor="let month of monthsToShow"
-  [month]="month">
-</app-month-calendar>
+<div class="calendar-container">
+  <div class="calendar"
+       *ngFor="let month of monthsToShow">
+    <div class="calendar-title" [innerText]="monthToText(month)"></div>
+    <div class="calendar-header">
+      <div class="calendar-week-days"
+           *ngFor="let weekDay of weekDays"
+           [innerText]="weekDay">
+      </div>
+      <div class="calendar-body"
+      *ngFor="let day of daysInYearMonth(currentYear, month)"
+      [innerText]="day"></div>
+    </div>
+  </div>
+</div>
