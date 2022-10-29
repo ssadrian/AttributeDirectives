@@ -1,0 +1,30 @@
+.national-holiday {
+  color: #3fde70;
+}
+
+.regional-holiday {
+  color: #6967cf;
+}
+
+.local-holiday {
+  color: #d8279c;
+}
+
+.center-holiday {
+  color: #c8dc57;
+}
+
+.calendar {
+  width: 20vw;
+}
+
+.calendar-header,
+.calendar-body {
+  display: grid;
+  grid-template-columns: auto auto auto auto auto auto auto;
+  text-align: center;
+}
+
+.calendar-body {
+  row-gap: 10px;
+}

@@ -1,0 +1,30 @@
+<div class="d-flex gap-5 fs-2 mb-2">
+  <div class="holiday"
+       *ngFor="let holidayType of typesOfHolidays"
+       [innerText]="'Festiu ' + getHolyDayTypeName(holidayType.name)"
+       [ngStyle]="{color: holidayType.color}">
+  </div>
+</div>
+
+<div class="calendar-container">
+  <div class="shadow-lg p-3 calendar" *ngFor="let month of monthsToShow">
+    <div class="mb-3 fs-4 calendar-title" [innerText]="monthToText(month)"></div>
+
+    <div class="calendar-header">
+      <div class="calendar-week-days"
+           *ngFor="let weekDay of weekDays">
+        <button class="btn btn-dark rounded-circle">{{ weekDay }}</button>
+      </div>
+    </div>
+
+    <div class="calendar-body">
+      <div
+        *ngFor="let day of getCalendarElements(currentYear, month)"
+        [ngClass]="getHolyDayTypeName(day.holiday?.type) + '-holiday'">
+        <button class="btn" *ngIf="day != undefined">
+          {{ day == undefined ? "" : day.numeric }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
