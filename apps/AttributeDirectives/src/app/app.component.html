@@ -1,29 +1,29 @@
 <div class="d-flex gap-5 fs-2 mb-2">
   <div class="holiday"
        *ngFor="let holidayType of typesOfHolidays"
-       [innerText]="'Festiu ' + getHolyDayTypeName(holidayType.name)"
+       [innerText]="'Festiu ' + getHoliDayTypeName(holidayType.name)"
        [ngStyle]="{color: holidayType.color}">
   </div>
 </div>
 
 <div class="calendar-container">
-  <div class="shadow-lg p-3 calendar" *ngFor="let month of monthsToShow">
-    <div class="mb-3 fs-4 calendar-title" [innerText]="monthToText(month)"></div>
+  <div class="shadow-lg p-3 rounded-3 border calendar" *ngFor="let month of monthsToShow">
+    <div class="mb-3 fs-3 calendar-title" [innerText]="monthToText(month)"></div>
 
-    <div class="calendar-header">
-      <div class="calendar-week-days"
+    <div class="calendar-header fs-4">
+      <div class="calendar-week-days bg-dark text-white rounded-circle"
            *ngFor="let weekDay of weekDays">
-        <button class="btn btn-dark rounded-circle">{{ weekDay }}</button>
+        <span>{{ weekDay.substring(0, 1).toUpperCase() }}</span>
       </div>
     </div>
 
-    <div class="calendar-body">
+    <div class="calendar-body fs-5">
       <div
         *ngFor="let day of getCalendarElements(currentYear, month)"
-        [ngClass]="getHolyDayTypeName(day.holiday?.type) + '-holiday'">
-        <button class="btn" *ngIf="day != undefined">
-          {{ day == undefined ? "" : day.numeric }}
-        </button>
+        [ngClass]="getHoliDayTypeName(day?.holiday?.type) === false ? undefined : getHoliDayTypeName(day?.holiday?.type) + '-holiday'">
+        <span>
+          {{ day === undefined ? "" : day.numeric }}
+        </span>
       </div>
     </div>
   </div>

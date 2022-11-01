@@ -28,6 +28,7 @@ enum HolidayType {
   templateUrl: "./app.component.html",
   styleUrls: ["./app.component.css"]
 })
+//@ts-ignore
 export class AppComponent {
   title: string = "AttributeDirectives";
   locale: string = "es";
@@ -41,10 +42,11 @@ export class AppComponent {
   ];
 
   holidays: IHoliday[] = [
+    // Months & days are 0 indexed
     { date: new Date(2022, 8, 11), type: { name: HolidayType.Regional } },
     { date: new Date(2022, 8, 29), type: { name: HolidayType.Local } },
     { date: new Date(2022, 9, 12), type: { name: HolidayType.National } },
-    { date: new Date(2022, 8, 31), type: { name: HolidayType.Centre } }
+    { date: new Date(2022, 9, 31), type: { name: HolidayType.Centre } }
   ];
 
   currentYear: number;
@@ -56,15 +58,16 @@ export class AppComponent {
   }
 
   getCalendarElements(year: number, month: number): (IDayOfMonth | undefined)[] {
-    let someMonday: string = this.weekDays[0];
+    let firstDayOfWee: string = this.weekDays[0];
 
     let calendarDays: IDayOfMonth[] = this.daysInYearMonth(year, month);
-    let firstEmptyDaysCount: number = this.getDifferenceBetweenDays(someMonday, calendarDays[0].name);
-    let remainingEmptyDaysCount: number = 7 * 5;
+    let firstEmptyDaysCount: number = this.getDifferenceBetweenDays(firstDayOfWee, calendarDays[0].name);
 
-    return new Array(firstEmptyDaysCount)
-      .concat(calendarDays)
-      .concat(new Array(remainingEmptyDaysCount));
+    let calendarElements: (IDayOfMonth | undefined)[] =
+      new Array(firstEmptyDaysCount)
+        .concat(calendarDays);
+
+    return calendarElements;
   }
 
   monthToText(month: number): string {
@@ -77,7 +80,6 @@ export class AppComponent {
     let comparisonDayIndex: number = this.weekDays.indexOf(comparisonDay);
     let comparerDayIndex: number = this.weekDays.indexOf(comparerDay);
 
-    console.log(Math.abs(comparisonDayIndex - comparerDayIndex));
     return Math.abs(comparisonDayIndex - comparerDayIndex);
   }
 
@@ -88,26 +90,30 @@ export class AppComponent {
     for (let i = 1; i <= totalDays; i++) {
       let targetDate: Date = new Date(year, month, i);
 
-      let dayName: string = Intl.DateTimeFormat(this.locale, { weekday: "narrow" })
+      let dayName: string = Intl.DateTimeFormat(this.locale, { weekday: "short" })
         .format(targetDate);
 
-      let holiday: IHoliday | undefined = this.holidays.find(x => x.date == targetDate);
+      let matchedHoliday: IHoliday | undefined = this.holidays.find(x => x.date.getTime() - targetDate.getTime() === 0);
 
-      let dayOfMonth: IDayOfMonth = { numeric: i, name: dayName, holiday: holiday };
+      let dayOfMonth: IDayOfMonth = { numeric: i, name: dayName, holiday: matchedHoliday };
       daysOfMonth.push(dayOfMonth);
     }
 
     return daysOfMonth;
   }
 
-  getHolyDayTypeName(holidayType: IHolidayType | HolidayType): string {
-    switch (<IHolidayType>holidayType) {
-      case undefined:
-        return HolidayType[(<IHolidayType>holidayType).name];
-
-      default:
-        return HolidayType[(<HolidayType>holidayType)];
+  getHoliDayTypeName(holidayType?: IHolidayType | HolidayType): string | boolean {
+    if (holidayType === undefined || holidayType === null) {
+      return false;
     }
+
+    let holidayTypeName: string = HolidayType[(<IHolidayType>holidayType).name];
+
+    if (holidayTypeName === undefined) {
+      holidayTypeName = HolidayType[(<HolidayType>holidayType)];
+    }
+
+    return holidayTypeName.toLowerCase();
   }
 
   #getWeekDays(): string[] {
@@ -116,7 +122,7 @@ export class AppComponent {
     let weekDays: string[] = [];
 
     for (let i: number = 0; i < 7; i++) {
-      weekDays.push(baseDate.toLocaleDateString(this.locale, { weekday: "narrow" }));
+      weekDays.push(baseDate.toLocaleDateString(this.locale, { weekday: "short" }));
       baseDate.setDate(baseDate.getDate() + 1);
     }
 

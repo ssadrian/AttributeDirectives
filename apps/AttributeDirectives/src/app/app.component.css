@@ -1,30 +1,46 @@
 .national-holiday {
-  color: #3fde70;
+  background-color: #3fde70;
 }
 
 .regional-holiday {
-  color: #6967cf;
+  background-color: #6967cf;
 }
 
 .local-holiday {
-  color: #d8279c;
+  background-color: #d8279c;
 }
 
-.center-holiday {
-  color: #c8dc57;
+.centre-holiday {
+  background-color: #c8dc57;
+}
+
+.centre-holiday,
+.national-holiday,
+.regional-holiday,
+.local-holiday {
+  border-radius: 50%;
+}
+
+.calendar-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
 .calendar {
-  width: 20vw;
+  width: 22.5vw;
+}
+
+.calendar-header {
+  margin-bottom: .25rem;
 }
 
 .calendar-header,
 .calendar-body {
   display: grid;
-  grid-template-columns: auto auto auto auto auto auto auto;
+  grid-template-columns: repeat(7, 1fr);
   text-align: center;
-}
-
-.calendar-body {
-  row-gap: 10px;
+  justify-content: space-between;
+  column-gap: 1.5rem;
+  row-gap: .5rem;
 }
