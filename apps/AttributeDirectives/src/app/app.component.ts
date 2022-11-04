@@ -28,7 +28,6 @@ enum HolidayType {
   templateUrl: "./app.component.html",
   styleUrls: ["./app.component.css"]
 })
-//@ts-ignore
 export class AppComponent {
   title: string = "AttributeDirectives";
   locale: string = "es";
@@ -42,7 +41,6 @@ export class AppComponent {
   ];
 
   holidays: IHoliday[] = [
-    // Months & days are 0 indexed
     { date: new Date(2022, 8, 11), type: { name: HolidayType.Regional } },
     { date: new Date(2022, 8, 29), type: { name: HolidayType.Local } },
     { date: new Date(2022, 9, 12), type: { name: HolidayType.National } },
@@ -102,7 +100,7 @@ export class AppComponent {
     return daysOfMonth;
   }
 
-  getHoliDayTypeName(holidayType?: IHolidayType | HolidayType): string | boolean {
+  getHolidayTypeName(holidayType?: IHolidayType | HolidayType): string | boolean {
     if (holidayType === undefined || holidayType === null) {
       return false;
     }
@@ -117,7 +115,6 @@ export class AppComponent {
   }
 
   #getWeekDays(): string[] {
-    // Passed date is not important
     let baseDate: Date = new Date(0, 0, 1);
     let weekDays: string[] = [];
 

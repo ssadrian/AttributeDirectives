@@ -1,7 +1,7 @@
 <div class="d-flex gap-5 fs-2 mb-2">
   <div class="holiday"
        *ngFor="let holidayType of typesOfHolidays"
-       [innerText]="'Festiu ' + getHoliDayTypeName(holidayType.name)"
+       [innerText]="'Festiu ' + getHolidayTypeName(holidayType.name)"
        [ngStyle]="{color: holidayType.color}">
   </div>
 </div>
@@ -20,7 +20,7 @@
     <div class="calendar-body fs-5">
       <div
         *ngFor="let day of getCalendarElements(currentYear, month)"
-        [ngClass]="getHoliDayTypeName(day?.holiday?.type) === false ? undefined : getHoliDayTypeName(day?.holiday?.type) + '-holiday'">
+        [ngClass]="getHolidayTypeName(day?.holiday?.type) === false ? undefined : getHolidayTypeName(day?.holiday?.type) + '-holiday'">
         <span>
           {{ day === undefined ? "" : day.numeric }}
         </span>
