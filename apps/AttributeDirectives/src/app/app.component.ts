@@ -17,10 +17,10 @@ interface IDayOfMonth {
 }
 
 enum HolidayType {
-  National,
-  Regional,
-  Local,
-  Centre
+  National = "National",
+  Regional = "Regional",
+  Local = "Local",
+  Centre = "Centre"
 }
 
 @Component({
@@ -30,42 +30,47 @@ enum HolidayType {
 })
 export class AppComponent {
   title: string = "AttributeDirectives";
-  locale: string = "es";
+  locale: string;
 
-  monthsToShow: number[] = [8, 9];
-  typesOfHolidays: IHolidayType[] = [
-    { name: HolidayType.National, color: "#3fde70" },
-    { name: HolidayType.Regional, color: "#6967cf" },
-    { name: HolidayType.Local, color: "#d8279c" },
-    { name: HolidayType.Centre, color: "#c8dc57" }
-  ];
+  monthsToShow: number[];
+  typesOfHolidays: IHolidayType[];
 
-  holidays: IHoliday[] = [
-    { date: new Date(2022, 8, 11), type: { name: HolidayType.Regional } },
-    { date: new Date(2022, 8, 29), type: { name: HolidayType.Local } },
-    { date: new Date(2022, 9, 12), type: { name: HolidayType.National } },
-    { date: new Date(2022, 9, 31), type: { name: HolidayType.Centre } }
-  ];
+  holidays: IHoliday[];
 
   currentYear: number;
-  weekDays: string[] = [];
+  weekDays: string[];
 
   constructor() {
     this.weekDays = this.#getWeekDays();
     this.currentYear = new Date().getFullYear();
+
+    this.locale = JSON.parse(`"es"`);
+    this.monthsToShow = JSON.parse("[8, 9]");
+
+    this.holidays = JSON.parse(`[
+      { "date": "2022-09-10T22:00:00.000Z", "type": { "name": "Regional" } },
+      { "date": "2022-09-28T22:00:00.000Z", "type": { "name": "Local" } },
+      { "date": "2022-10-11T22:00:00.000Z", "type": { "name": "National" } },
+      { "date": "2022-10-30T23:00:00.000Z", "type": { "name": "Centre" } }
+    ]`);
+
+    this.typesOfHolidays = JSON.parse(`[
+      { "name": "National", "color": "#3fde70" },
+      { "name": "Regional", "color": "#6967cf" },
+      { "name": "Local", "color": "#d8279c" },
+      { "name": "Centre", "color": "#c8dc57" }
+    ]`);
   }
 
   getCalendarElements(year: number, month: number): (IDayOfMonth | undefined)[] {
     let firstDayOfWee: string = this.weekDays[0];
 
     let calendarDays: IDayOfMonth[] = this.daysInYearMonth(year, month);
-    let firstEmptyDaysCount: number = this.getDifferenceBetweenDays(firstDayOfWee, calendarDays[0].name);
+    let firstEmptyDaysCount: number = this
+      .getDifferenceBetweenDays(firstDayOfWee, calendarDays[0].name);
 
-    let calendarElements: (IDayOfMonth | undefined)[] =
-      new Array(firstEmptyDaysCount)
-        .concat(calendarDays);
-
-    return calendarElements;
+    return new Array(firstEmptyDaysCount)
+      .concat(calendarDays);
   }
 
   monthToText(month: number): string {
@@ -85,13 +90,14 @@ export class AppComponent {
     let totalDays: number = new Date(year, month + 1, 0).getDate();
     let daysOfMonth: IDayOfMonth[] = [];
 
-    for (let i = 1; i <= totalDays; i++) {
+    for (let i: number = 1; i <= totalDays; i++) {
       let targetDate: Date = new Date(year, month, i);
 
       let dayName: string = Intl.DateTimeFormat(this.locale, { weekday: "short" })
         .format(targetDate);
 
-      let matchedHoliday: IHoliday | undefined = this.holidays.find(x => x.date.getTime() - targetDate.getTime() === 0);
+      let matchedHoliday: IHoliday | undefined = this.holidays
+        .find((x: IHoliday): boolean => new Date(x.date).getTime() - targetDate.getTime() === 0);
 
       let dayOfMonth: IDayOfMonth = { numeric: i, name: dayName, holiday: matchedHoliday };
       daysOfMonth.push(dayOfMonth);
@@ -129,7 +135,7 @@ export class AppComponent {
   #toTitleCase(str: string): string {
     return str.replace(
       /\w\S*/g,
-      (txt) => {
+      (txt: string) => {
         return txt.charAt(0).toUpperCase() + txt.substring(1).toLowerCase();
       }
     );
